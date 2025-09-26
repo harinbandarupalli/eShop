@@ -1,0 +1,45 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: eshop-postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-eshop}
+      - POSTGRES_USER=${POSTGRES_USER:-local_user}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-local_password}
+    ports:
+      - "5432:5432"
+    networks:
+      - eshop-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-local_user} -d ${POSTGRES_DB:-eshop}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  flyway-migration:
+    image: flyway/flyway:latest
+    container_name: eshop-flyway
+    environment:
+      - FLYWAY_URL=jdbc:postgresql://postgres:5432/${POSTGRES_DB}
+      - FLYWAY_USER=${POSTGRES_USER}
+      - FLYWAY_PASSWORD=${POSTGRES_PASSWORD}
+      - FLYWAY_SCHEMAS=public
+      - FLYWAY_LOCATIONS=filesystem:/flyway/sql
+    volumes:
+      - ./src/main/resources/db/migration:/flyway/sql:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: migrate
+    networks:
+      - eshop-network
+
+networks:
+  eshop-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local

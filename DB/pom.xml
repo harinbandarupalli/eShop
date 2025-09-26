@@ -4,51 +4,157 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.eshop.db</groupId>
-    <artifactId>eshop-db</artifactId>
+    <groupId>com.bilbo.store</groupId>
+    <artifactId>bilbo-db</artifactId>
     <version>1.0-SNAPSHOT</version>
-
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <flyway.version>10.15.2</flyway.version>
+        <postgresql.version>42.7.7</postgresql.version>
+        <!-- Fixed: Use consistent property name -->
+        <config.profile>local</config.profile>
     </properties>
 
     <dependencies>
-        <!-- Flyway for database migrations -->
+        <!-- PostgreSQL JDBC Driver -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
+        </dependency>
+
+        <!-- Flyway Core (optional - for programmatic usage) -->
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>10.13.0</version>
+            <version>${flyway.version}</version>
+        </dependency>
+
+        <!-- Flyway PostgreSQL (required for PostgreSQL support) -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-database-postgresql</artifactId>
+            <version>${flyway.version}</version>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <!-- Maven Compiler Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
+            </plugin>
+
+            <!-- Properties Maven Plugin - Load properties BEFORE flyway plugin execution -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <executions>
+                    <execution>
+                        <id>load-properties</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>read-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <files>
+                                <file>${basedir}/src/main/resources/application-${config.profile}.properties</file>
+                            </files>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Flyway Maven Plugin -->
             <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
-                <version>10.13.0</version>
+                <version>${flyway.version}</version>
+                <configuration>
+                    <!-- Database connection settings from loaded properties -->
+                    <url>${flyway.url}</url>
+                    <user>${flyway.user}</user>
+                    <password>${flyway.password}</password>
+
+                    <!-- Migration settings -->
+                    <locations>
+                        <location>classpath:db/migration</location>
+                        <location>filesystem:src/main/resources/db/migration</location>
+                    </locations>
+
+                    <!-- Schema settings -->
+                    <schemas>
+                        <schema>public</schema>
+                    </schemas>
+
+                    <!-- Migration validation -->
+                    <validateOnMigrate>true</validateOnMigrate>
+                    <cleanDisabled>true</cleanDisabled>
+
+                    <!-- Baseline settings -->
+                    <baselineOnMigrate>true</baselineOnMigrate>
+                    <baselineVersion>0</baselineVersion>
+                    <baselineDescription>Initial baseline</baselineDescription>
+                </configuration>
+                <dependencies>
+                    <!-- PostgreSQL JDBC Driver for Flyway plugin -->
+                    <dependency>
+                        <groupId>org.postgresql</groupId>
+                        <artifactId>postgresql</artifactId>
+                        <version>${postgresql.version}</version>
+                    </dependency>
+                    <!-- Flyway PostgreSQL support -->
+                    <dependency>
+                        <groupId>org.flywaydb</groupId>
+                        <artifactId>flyway-database-postgresql</artifactId>
+                        <version>${flyway.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
 
     <profiles>
+        <!-- Local Development Profile -->
         <profile>
             <id>local</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <flyway.configFiles>src/main/resources/application-local.properties</flyway.configFiles>
+                <config.profile>local</config.profile>
             </properties>
         </profile>
         <profile>
+            <id>docker</id>
+            <properties>
+                <config.profile>docker</config.profile>
+            </properties>
+        </profile>
+
+        <!-- Production Profile -->
+        <profile>
             <id>prod</id>
             <properties>
-                <flyway.configFiles>src/main/resources/application-prod.properties</flyway.configFiles>
+                <config.profile>prod</config.profile>
+            </properties>
+        </profile>
+
+        <!-- Development Profile -->
+        <profile>
+            <id>dev</id>
+            <properties>
+                <config.profile>dev</config.profile>
             </properties>
         </profile>
     </profiles>
-
 </project>
