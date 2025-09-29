@@ -25,3 +25,38 @@ CREATE TABLE eShop.user_roles (
 -- Pre-populate the standard roles
 -- Note: The created_by for these initial roles will be NULL as they are system-defined.
 INSERT INTO eShop.roles (name) VALUES ('USER'), ('ADMIN');
+
+-- Roles History
+CREATE TABLE eShop.roles_history (
+    history_id UUID PRIMARY KEY,
+    action CHAR(1) NOT NULL,
+    changed_on TIMESTAMP WITH TIME ZONE NOT NULL,
+    id UUID,
+    name VARCHAR(50),
+    created_timestamp TIMESTAMP WITH TIME ZONE,
+    last_updated_timestamp TIMESTAMP WITH TIME ZONE,
+    created_by UUID,
+    last_updated_by UUID
+);
+
+CREATE TRIGGER roles_history_trigger
+AFTER INSERT OR UPDATE OR DELETE ON eShop.roles
+    FOR EACH ROW EXECUTE FUNCTION eShop.log_history();
+
+-- User Roles History
+CREATE TABLE eShop.user_roles_history (
+    history_id UUID PRIMARY KEY,
+    action CHAR(1) NOT NULL,
+    changed_on TIMESTAMP WITH TIME ZONE NOT NULL,
+    id UUID,
+    user_id UUID,
+    role_id UUID,
+    created_timestamp TIMESTAMP WITH TIME ZONE,
+    last_updated_timestamp TIMESTAMP WITH TIME ZONE,
+    created_by UUID,
+    last_updated_by UUID
+);
+
+CREATE TRIGGER user_roles_history_trigger
+AFTER INSERT OR UPDATE OR DELETE ON eShop.user_roles
+    FOR EACH ROW EXECUTE FUNCTION eShop.log_history();

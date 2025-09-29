@@ -28,3 +28,46 @@ CREATE TABLE eShop.order_items (
     created_by UUID REFERENCES eShop.users(id),
     last_updated_by UUID REFERENCES eShop.users(id)
 );
+
+-- Orders History
+CREATE TABLE eShop.orders_history (
+    history_id UUID PRIMARY KEY,
+    action CHAR(1) NOT NULL,
+    changed_on TIMESTAMP WITH TIME ZONE NOT NULL,
+    id UUID,
+    user_id UUID,
+    total_amount DECIMAL(10, 2),
+    status VARCHAR(50),
+    shipping_address_id UUID,
+    billing_address_id UUID,
+    shipping_type_id UUID,
+    payment_method_id UUID,
+    created_timestamp TIMESTAMP WITH TIME ZONE,
+    last_updated_timestamp TIMESTAMP WITH TIME ZONE,
+    created_by UUID,
+    last_updated_by UUID
+);
+
+CREATE TRIGGER orders_history_trigger
+AFTER INSERT OR UPDATE OR DELETE ON eShop.orders
+    FOR EACH ROW EXECUTE FUNCTION eShop.log_history();
+
+-- Order Items History
+CREATE TABLE eShop.order_items_history (
+    history_id UUID PRIMARY KEY,
+    action CHAR(1) NOT NULL,
+    changed_on TIMESTAMP WITH TIME ZONE NOT NULL,
+    id UUID,
+    order_id UUID,
+    product_id UUID,
+    quantity INT,
+    price_at_purchase DECIMAL(10, 2),
+    created_timestamp TIMESTAMP WITH TIME ZONE,
+    last_updated_timestamp TIMESTAMP WITH TIME ZONE,
+    created_by UUID,
+    last_updated_by UUID
+);
+
+CREATE TRIGGER order_items_history_trigger
+AFTER INSERT OR UPDATE OR DELETE ON eShop.order_items
+    FOR EACH ROW EXECUTE FUNCTION eShop.log_history();

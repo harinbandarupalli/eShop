@@ -39,3 +39,38 @@ END
 $$;
 
 GRANT read_role, write_role TO eshop_app_user;
+
+
+CREATE
+OR REPLACE FUNCTION eShop.log_history()
+RETURNS TRIGGER AS $$
+DECLARE
+history_table_name TEXT;
+  query
+TEXT;
+BEGIN
+  history_table_name
+:= TG_TABLE_NAME || '_history';
+  IF
+(TG_OP = 'INSERT') THEN
+    query := format('INSERT INTO eShop.%I SELECT gen_random_uuid(), \'I
+\', NOW(), $1.*', history_table_name);
+EXECUTE query USING NEW;
+RETURN NEW;
+ELSIF
+(TG_OP = 'UPDATE') THEN
+    query := format('INSERT INTO eShop.%I SELECT gen_random_uuid(), \'U
+\', NOW(), $1.*', history_table_name);
+EXECUTE query USING NEW;
+RETURN NEW;
+ELSIF
+(TG_OP = 'DELETE') THEN
+    query := format('INSERT INTO eShop.%I SELECT gen_random_uuid(), \'D
+\', NOW(), $1.*', history_table_name);
+EXECUTE query USING OLD;
+RETURN OLD;
+END IF;
+RETURN NULL;
+END;
+$$
+LANGUAGE plpgsql;

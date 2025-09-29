@@ -9,3 +9,21 @@ CREATE TABLE eShop.shipping_types (
     created_by UUID REFERENCES eShop.users(id),
     last_updated_by UUID REFERENCES eShop.users(id)
 );
+
+-- Shipping Types History
+CREATE TABLE eShop.shipping_types_history (
+    history_id UUID PRIMARY KEY,
+    action CHAR(1) NOT NULL,
+    changed_on TIMESTAMP WITH TIME ZONE NOT NULL,
+    id UUID,
+    name VARCHAR(50),
+    cost DECIMAL(10, 2),
+    created_timestamp TIMESTAMP WITH TIME ZONE,
+    last_updated_timestamp TIMESTAMP WITH TIME ZONE,
+    created_by UUID,
+    last_updated_by UUID
+);
+
+CREATE TRIGGER shipping_types_history_trigger
+AFTER INSERT OR UPDATE OR DELETE ON eShop.shipping_types
+    FOR EACH ROW EXECUTE FUNCTION eShop.log_history();

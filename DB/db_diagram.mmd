@@ -1,0 +1,136 @@
+%%{init: { 'theme': 'base', 'themeVariables': { 'primaryColor': '#D3D3D3', 'primaryTextColor': '#000000', 'primaryBorderColor': '#FFFFFF', 'lineColor': '#FFFFFF', 'textColor': '#FFFFFF' } } }%%
+erDiagram
+    users ||--o{ roles : "has"
+    users ||--|{ user_roles : "has"
+    roles ||--|{ user_roles : "has"
+    users ||--o{ addresses : "has"
+    users ||--o{ wishlists : "has"
+    users ||--o{ carts : "has"
+    users ||--o{ payment_methods : "has"
+    users ||--o{ orders : "places"
+
+    product_categories ||--|{ products : "contains"
+    products ||--|{ product_images : "has"
+    products ||--o{ wishlist_items : "is in"
+    products ||--o{ cart_items : "is in"
+    products ||--o{ order_items : "is in"
+
+    wishlists ||--|{ wishlist_items : "contains"
+    carts ||--|{ cart_items : "contains"
+
+    addresses ||--o{ orders : "shipping"
+    addresses ||--o{ orders : "billing"
+    addresses ||--o{ payment_methods : "billing"
+
+    shipping_types ||--o{ orders : "shipped via"
+    payment_methods ||--o{ orders : "paid with"
+
+    orders ||--|{ order_items : "contains"
+
+    users {
+        UUID id PK
+        VARCHAR username
+        VARCHAR email
+        VARCHAR first_name
+        VARCHAR last_name
+    }
+
+    roles {
+        UUID id PK
+        VARCHAR name
+    }
+
+    user_roles {
+        UUID id PK
+        UUID user_id FK
+        UUID role_id FK
+    }
+
+    product_categories {
+        UUID id PK
+        VARCHAR name
+        TEXT description
+    }
+
+    products {
+        UUID id PK
+        VARCHAR name
+        TEXT description
+        DECIMAL price
+        INT stock_quantity
+        UUID category_id FK
+        BOOLEAN is_trending
+    }
+
+    product_images {
+        UUID id PK
+        UUID product_id FK
+        TEXT image_url
+        VARCHAR alt_text
+    }
+
+    addresses {
+        UUID id PK
+        UUID user_id FK
+        VARCHAR address_line1
+        VARCHAR city
+        VARCHAR postal_code
+        VARCHAR country
+    }
+
+    wishlists {
+        UUID id PK
+        UUID user_id FK
+    }
+
+    wishlist_items {
+        UUID id PK
+        UUID wishlist_id FK
+        UUID product_id FK
+    }
+
+    carts {
+        UUID id PK
+        UUID user_id FK
+    }
+
+    cart_items {
+        UUID id PK
+        UUID cart_id FK
+        UUID product_id FK
+        INT quantity
+    }
+
+    shipping_types {
+        UUID id PK
+        VARCHAR name
+        DECIMAL cost
+    }
+
+    payment_methods {
+        UUID id PK
+        UUID user_id FK
+        VARCHAR token
+        VARCHAR cardholder_name
+        VARCHAR last4
+        UUID billing_address_id FK
+    }
+
+    orders {
+        UUID id PK
+        UUID user_id FK
+        DECIMAL total_amount
+        VARCHAR status
+        UUID shipping_address_id FK
+        UUID billing_address_id FK
+        UUID shipping_type_id FK
+        UUID payment_method_id FK
+    }
+
+    order_items {
+        UUID id PK
+        UUID order_id FK
+        UUID product_id FK
+        INT quantity
+        DECIMAL price_at_purchase
+    }

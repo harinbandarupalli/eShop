@@ -21,3 +21,39 @@ CREATE TABLE eShop.cart_items (
     created_by UUID REFERENCES eShop.users(id),
     last_updated_by UUID REFERENCES eShop.users(id)
 );
+
+-- Carts History
+CREATE TABLE eShop.carts_history (
+    history_id UUID PRIMARY KEY,
+    action CHAR(1) NOT NULL,
+    changed_on TIMESTAMP WITH TIME ZONE NOT NULL,
+    id UUID,
+    user_id UUID,
+    created_timestamp TIMESTAMP WITH TIME ZONE,
+    last_updated_timestamp TIMESTAMP WITH TIME ZONE,
+    created_by UUID,
+    last_updated_by UUID
+);
+
+CREATE TRIGGER carts_history_trigger
+AFTER INSERT OR UPDATE OR DELETE ON eShop.carts
+    FOR EACH ROW EXECUTE FUNCTION eShop.log_history();
+
+-- Cart Items History
+CREATE TABLE eShop.cart_items_history (
+    history_id UUID PRIMARY KEY,
+    action CHAR(1) NOT NULL,
+    changed_on TIMESTAMP WITH TIME ZONE NOT NULL,
+    id UUID,
+    cart_id UUID,
+    product_id UUID,
+    quantity INT,
+    created_timestamp TIMESTAMP WITH TIME ZONE,
+    last_updated_timestamp TIMESTAMP WITH TIME ZONE,
+    created_by UUID,
+    last_updated_by UUID
+);
+
+CREATE TRIGGER cart_items_history_trigger
+AFTER INSERT OR UPDATE OR DELETE ON eShop.cart_items
+    FOR EACH ROW EXECUTE FUNCTION eShop.log_history();
