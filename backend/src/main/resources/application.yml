@@ -1,12 +1,5 @@
 # PostgreSQL Database Connection
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/eshop
-    username: postgres
-    password: postgres
-
-  # JPA and Hibernate Configuration
-  # Use 'validate' to ensure the schema created by Flyway matches the entities.
   jpa:
     hibernate:
       ddl-auto: validate
@@ -14,3 +7,21 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: "YOUR_OAUTH2_ISSUER_URI"
+
+cors:
+  allowed-origins: http://localhost:3000
+
+springdoc:
+  version: '@project.version@'
+
+security:
+  white-list-urls:
+    - "/public/**"
+    - "/v3/api-docs/**"
+    - "/swagger-ui/**"
+    - "/swagger-ui.html"

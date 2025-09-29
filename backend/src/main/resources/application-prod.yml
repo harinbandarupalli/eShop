@@ -1,0 +1,6 @@
+# PostgreSQL Database Connection
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/eshop
+    username: postgres
+    password: postgres
