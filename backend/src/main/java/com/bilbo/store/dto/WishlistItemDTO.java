@@ -1,0 +1,10 @@
+package com.bilbo.store.dto;
+
+import lombok.Data;
+import java.util.UUID;
+
+@Data
+public class WishlistItemDTO {
+    private UUID id;
+    private UUID productId;
+}

@@ -21,6 +21,7 @@ springdoc:
 
 security:
   white-list-urls:
+    - "/api/products/**" # <-- Add this line to allow public access
     - "/public/**"
     - "/v3/api-docs/**"
     - "/swagger-ui/**"
