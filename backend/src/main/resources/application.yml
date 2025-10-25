@@ -1,8 +1,16 @@
 # PostgreSQL Database Connection
+server:
+  forward-headers-strategy: native
+
 spring:
+  datasource:
+    # Use environment variables from docker-compose, with defaults for local development outside of Docker.
+    url: "${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/eshop}"
+    username: "${SPRING_DATASOURCE_USERNAME:postgres}"
+    password: "${SPRING_DATASOURCE_PASSWORD:postgres}"
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: none
     show-sql: true
     properties:
       hibernate:
@@ -11,18 +19,28 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: "YOUR_OAUTH2_ISSUER_URI"
-
+          # These values are injected by docker-compose from the .env file
+          issuer-uri: "${SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI}"
+          audience: "${SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_AUDIENCE}"
 cors:
-  allowed-origins: http://localhost:3000
+  allowed-origins: "${CORS_ALLOWED-ORIGINS:http://localhost:4200}"
+
+bilbo:
+  security:
+    white-list-urls:
+      - "/api/products/**"
+      - "/public/**"
+      - "/v3/api-docs/**"
+      - "/swagger-ui/**"
+      - "/swagger-ui.html"
+      - "/actuator/health"
+    principal-attribute: sub
 
 springdoc:
   version: '@project.version@'
 
-security:
-  white-list-urls:
-    - "/api/products/**" # <-- Add this line to allow public access
-    - "/public/**"
-    - "/v3/api-docs/**"
-    - "/swagger-ui/**"
-    - "/swagger-ui.html"
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health

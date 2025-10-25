@@ -1,6 +1,5 @@
 package com.bilbo.store.entites;
 
-import com.bilbo.store.util.EncryptionUtil;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,9 +24,6 @@ public class User {
     @Column(unique = true, nullable = false, length = 50)
     private String username;
 
-    @Column(nullable = false)
-    private String password;
-
     @Column(unique = true, nullable = false)
     private String email;
 
@@ -50,12 +46,4 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "last_updated_by")
     private User lastUpdatedBy;
-
-    public void setPassword(String password) {
-        this.password = EncryptionUtil.encrypt(password);
-    }
-
-    public String getPassword() {
-        return EncryptionUtil.decrypt(this.password);
-    }
 }

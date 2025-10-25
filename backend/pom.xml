@@ -20,6 +20,7 @@
         <openapi-swagger.version>2.8.13</openapi-swagger.version>
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
+        <jacoco.version>0.8.11</jacoco.version>
     </properties>
     <dependencies>
         <dependency>
@@ -97,6 +98,12 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -128,8 +135,34 @@
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <includes>
+                        <include>**/com/bilbo/store/controller/**/*.class</include>
+                        <include>**/com/bilbo/store/service/**/*.class</include>
+                        <include>**/com/bilbo/store/mapper/**/*.class</include>
+                        <include>**/com/bilbo/store/util/**/*.class</include>
+                    </includes>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
 </project>
- 

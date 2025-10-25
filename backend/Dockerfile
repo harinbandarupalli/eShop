@@ -1,5 +1,8 @@
 # Stage 1: Build the application
-FROM maven:3.8.5-openjdk-17 AS build
+FROM bellsoft/liberica-openjdk-debian:21 AS build
+
+# Install Maven
+RUN apt-get update && apt-get install -y maven
 
 WORKDIR /app
 
@@ -14,7 +17,7 @@ COPY src ./src
 RUN mvn package -DskipTests
 
 # Stage 2: Create the final, lightweight image
-FROM eclipse-temurin:17-jre-jammy
+FROM bellsoft/liberica-openjdk-debian:21
 
 WORKDIR /app
 

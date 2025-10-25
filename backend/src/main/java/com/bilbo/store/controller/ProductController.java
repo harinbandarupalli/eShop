@@ -59,8 +59,9 @@ public class ProductController {
      */
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ProductDTO> updateProduct(@PathVariable UUID id, @RequestBody ProductDTO productDTO) {
-        ProductDTO updatedProduct = productService.updateProduct(id, productDTO);
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable UUID id, @RequestBody ProductDTO productDTO, Authentication authentication) {
+        String userId = authentication.getName();
+        ProductDTO updatedProduct = productService.updateProduct(id, productDTO, userId);
         return ResponseEntity.ok(updatedProduct);
     }
 
@@ -70,8 +71,9 @@ public class ProductController {
      */
     @PatchMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ProductDTO> patchProduct(@PathVariable UUID id, @RequestBody ProductDTO productDTO) {
-        ProductDTO patchedProduct = productService.patchProduct(id, productDTO);
+    public ResponseEntity<ProductDTO> patchProduct(@PathVariable UUID id, @RequestBody ProductDTO productDTO, Authentication authentication) {
+        String userId = authentication.getName();
+        ProductDTO patchedProduct = productService.patchProduct(id, productDTO, userId);
         return ResponseEntity.ok(patchedProduct);
     }
 

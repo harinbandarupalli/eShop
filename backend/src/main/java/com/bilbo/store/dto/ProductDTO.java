@@ -6,5 +6,9 @@ import java.util.UUID;
 public record ProductDTO(
         UUID id,
         String name,
-        BigDecimal price
+        String description,
+        BigDecimal price,
+        Integer stockQuantity,
+        UUID categoryId,
+        Boolean isTrending
 ) {}
