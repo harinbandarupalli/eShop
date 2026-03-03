@@ -2,7 +2,7 @@
 
 CREATE TABLE eShop.payment_methods (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL REFERENCES eShop.users(id) ON DELETE CASCADE,
+    user_id         VARCHAR(255) NOT NULL REFERENCES eShop.users (sub) ON DELETE CASCADE,
     token VARCHAR(255), -- Token from a payment provider like Stripe
     cardholder_name VARCHAR(255) NOT NULL,
     last4 VARCHAR(4) NOT NULL,
@@ -13,8 +13,8 @@ CREATE TABLE eShop.payment_methods (
     billing_zipcode VARCHAR(20),
     created_timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     last_updated_timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    created_by UUID REFERENCES eShop.users(id),
-    last_updated_by UUID REFERENCES eShop.users(id)
+    created_by      VARCHAR(255) REFERENCES eShop.users (sub),
+    last_updated_by VARCHAR(255) REFERENCES eShop.users (sub)
 );
 
 -- Payment Methods History
@@ -23,7 +23,7 @@ CREATE TABLE eShop.payment_methods_history (
     action CHAR(1) NOT NULL,
     changed_on TIMESTAMP WITH TIME ZONE NOT NULL,
     id UUID,
-    user_id UUID,
+    user_id         VARCHAR(255),
     token VARCHAR(255),
     cardholder_name VARCHAR(255),
     last4 VARCHAR(4),
@@ -34,8 +34,8 @@ CREATE TABLE eShop.payment_methods_history (
     billing_zipcode VARCHAR(20),
     created_timestamp TIMESTAMP WITH TIME ZONE,
     last_updated_timestamp TIMESTAMP WITH TIME ZONE,
-    created_by UUID,
-    last_updated_by UUID
+    created_by      VARCHAR(255),
+    last_updated_by VARCHAR(255)
 );
 
 CREATE TRIGGER payment_methods_history_trigger

@@ -41,8 +41,10 @@ services:
   backend:
     build:
       context: ./backend
-      dockerfile: DockerFile
+      dockerfile: Dockerfile
     container_name: eshop-backend
+    env_file:
+      - ./.env  # Load environment variables from the .env file
     depends_on:
       flyway-migration:
         condition: service_completed_successfully
@@ -50,9 +52,6 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/${POSTGRES_DB}
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
-      # --- Auth0 Security ---
-      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=${AUTH0_ISSUER_URI}
-      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_AUDIENCE=${AUTH0_AUDIENCE}
     ports:
       - "8080:8080"
     networks:

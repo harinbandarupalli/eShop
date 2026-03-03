@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,15 +41,11 @@ public class ProductController {
     /**
      * A protected endpoint to create a new product.
      * Only users with the 'ADMIN' role can access this.
-     * The role is extracted from the JWT by your JwtAuthConverter.
-     *
-     * @param authentication The Authentication object, injected by Spring Security.
      */
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO productDTO, Authentication authentication) {
-        // You can get the user's ID (the 'sub' claim) from the Authentication principal
-        String userId = authentication.getName();
+        String userId = getUserId(authentication);
         ProductDTO createdProduct = productService.createProduct(productDTO, userId);
         return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
     }
@@ -60,7 +57,7 @@ public class ProductController {
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProductDTO> updateProduct(@PathVariable UUID id, @RequestBody ProductDTO productDTO, Authentication authentication) {
-        String userId = authentication.getName();
+        String userId = getUserId(authentication);
         ProductDTO updatedProduct = productService.updateProduct(id, productDTO, userId);
         return ResponseEntity.ok(updatedProduct);
     }
@@ -72,7 +69,7 @@ public class ProductController {
     @PatchMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProductDTO> patchProduct(@PathVariable UUID id, @RequestBody ProductDTO productDTO, Authentication authentication) {
-        String userId = authentication.getName();
+        String userId = getUserId(authentication);
         ProductDTO patchedProduct = productService.patchProduct(id, productDTO, userId);
         return ResponseEntity.ok(patchedProduct);
     }
@@ -86,5 +83,20 @@ public class ProductController {
     public ResponseEntity<Void> deleteProduct(@PathVariable UUID id) {
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Extracts the user ID (sub claim) from the authentication principal.
+     * @param authentication The authentication object provided by Spring Security.
+     * @return The user's unique identifier.
+     */
+    private String getUserId(Authentication authentication) {
+        if (authentication == null || !(authentication.getPrincipal() instanceof Jwt)) {
+            // This case should ideally not be reached in a secured endpoint
+            // but provides a safeguard.
+            throw new IllegalArgumentException("Authentication principal is not a valid JWT");
+        }
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        return jwt.getSubject();
     }
 }

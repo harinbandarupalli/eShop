@@ -30,6 +30,11 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
@@ -46,6 +51,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-client</artifactId>
         </dependency>
 
         <dependency>
@@ -156,9 +166,9 @@
                 <configuration>
                     <includes>
                         <include>**/com/bilbo/store/controller/**/*.class</include>
-                        <include>**/com/bilbo/store/service/**/*.class</include>
-                        <include>**/com/bilbo/store/mapper/**/*.class</include>
-                        <include>**/com/bilbo/store/util/**/*.class</include>
+                        <include>**/com.bilbo.store/service/**/*.class</include>
+                        <include>**/com.bilbo.store/mapper/**/*.class</include>
+                        <include>**/com.bilbo.store/util/**/*.class</include>
                     </includes>
                 </configuration>
             </plugin>

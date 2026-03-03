@@ -4,15 +4,18 @@ import com.bilbo.store.dto.AddressDTO;
 import com.bilbo.store.entites.Address;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface AddressMapper {
 
-  AddressMapper INSTANCE = Mappers.getMapper(AddressMapper.class);
+    @Mapping(source = "userId", target = "userId")
+    AddressDTO toDto(Address address);
 
-  AddressDTO toDto(Address address);
-
-  @Mapping(target = "id", ignore = true)
-  Address toEntity(AddressDTO addressDTO);
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "userId", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "lastUpdatedBy", ignore = true)
+    @Mapping(target = "createdTimestamp", ignore = true)
+    @Mapping(target = "lastUpdatedTimestamp", ignore = true)
+    Address toEntity(AddressDTO addressDTO);
 }

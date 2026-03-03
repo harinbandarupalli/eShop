@@ -4,12 +4,9 @@ import com.bilbo.store.dto.ProductDTO;
 import com.bilbo.store.entites.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "spring", uses = {ProductImageMapper.class})
+@Mapper(componentModel = "spring", uses = {ProductImageMapper.class, ProductCategoryMapper.class})
 public interface ProductMapper {
-
-    ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
 
     @Mapping(source = "category.id", target = "categoryId")
     ProductDTO toDto(Product product);
@@ -19,5 +16,7 @@ public interface ProductMapper {
     @Mapping(target = "images", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "lastUpdatedBy", ignore = true)
+    @Mapping(target = "createdTimestamp", ignore = true)
+    @Mapping(target = "lastUpdatedTimestamp", ignore = true)
     Product toEntity(ProductDTO productDTO);
 }

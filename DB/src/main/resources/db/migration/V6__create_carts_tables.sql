@@ -3,11 +3,11 @@
 -- Shopping Cart
 CREATE TABLE eShop.carts (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID UNIQUE REFERENCES eShop.users(id) ON DELETE CASCADE, -- Can be NULL for guest carts
+    user_id         VARCHAR(255) UNIQUE REFERENCES eShop.users (sub) ON DELETE CASCADE, -- Can be NULL for guest carts
     created_timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     last_updated_timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    created_by UUID REFERENCES eShop.users(id),
-    last_updated_by UUID REFERENCES eShop.users(id)
+    created_by      VARCHAR(255) REFERENCES eShop.users (sub),
+    last_updated_by VARCHAR(255) REFERENCES eShop.users (sub)
 );
 
 -- Cart Items
@@ -18,8 +18,8 @@ CREATE TABLE eShop.cart_items (
     quantity INT NOT NULL DEFAULT 1,
     created_timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     last_updated_timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    created_by UUID REFERENCES eShop.users(id),
-    last_updated_by UUID REFERENCES eShop.users(id)
+    created_by      VARCHAR(255) REFERENCES eShop.users (sub),
+    last_updated_by VARCHAR(255) REFERENCES eShop.users (sub)
 );
 
 -- Carts History
@@ -28,11 +28,11 @@ CREATE TABLE eShop.carts_history (
     action CHAR(1) NOT NULL,
     changed_on TIMESTAMP WITH TIME ZONE NOT NULL,
     id UUID,
-    user_id UUID,
+    user_id         VARCHAR(255),
     created_timestamp TIMESTAMP WITH TIME ZONE,
     last_updated_timestamp TIMESTAMP WITH TIME ZONE,
-    created_by UUID,
-    last_updated_by UUID
+    created_by      VARCHAR(255),
+    last_updated_by VARCHAR(255)
 );
 
 CREATE TRIGGER carts_history_trigger
@@ -50,8 +50,8 @@ CREATE TABLE eShop.cart_items_history (
     quantity INT,
     created_timestamp TIMESTAMP WITH TIME ZONE,
     last_updated_timestamp TIMESTAMP WITH TIME ZONE,
-    created_by UUID,
-    last_updated_by UUID
+    created_by      VARCHAR(255),
+    last_updated_by VARCHAR(255)
 );
 
 CREATE TRIGGER cart_items_history_trigger

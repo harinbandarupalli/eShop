@@ -5,21 +5,26 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.UUID;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "shipping_types", schema = "eshop")
 public class ShippingType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @EqualsAndHashCode.Include
     private UUID id;
 
     @Column(unique = true, nullable = false, length = 50)
@@ -34,11 +39,9 @@ public class ShippingType {
     @Column(name = "last_updated_timestamp")
     private OffsetDateTime lastUpdatedTimestamp;
 
-    @ManyToOne
-    @JoinColumn(name = "created_by")
-    private User createdBy;
+    @Column(name = "created_by")
+    private String createdBy;
 
-    @ManyToOne
-    @JoinColumn(name = "last_updated_by")
-    private User lastUpdatedBy;
+    @Column(name = "last_updated_by")
+    private String lastUpdatedBy;
 }

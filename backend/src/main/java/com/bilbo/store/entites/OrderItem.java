@@ -11,15 +11,22 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.UUID;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString(exclude = {"order", "product"})
 @Entity
 @Table(name = "order_items", schema = "eshop")
 public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @EqualsAndHashCode.Include
     private UUID id;
 
     @ManyToOne
@@ -42,11 +49,9 @@ public class OrderItem {
     @Column(name = "last_updated_timestamp")
     private OffsetDateTime lastUpdatedTimestamp;
 
-    @ManyToOne
-    @JoinColumn(name = "created_by")
-    private User createdBy;
+    @Column(name = "created_by")
+    private String createdBy;
 
-    @ManyToOne
-    @JoinColumn(name = "last_updated_by")
-    private User lastUpdatedBy;
+    @Column(name = "last_updated_by")
+    private String lastUpdatedBy;
 }

@@ -1,15 +1,14 @@
 package com.bilbo.store.dto;
 
-import lombok.Data;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
+import lombok.Data;
 
 @Data
 public class OrderDTO {
     private UUID id;
-    private UUID userId;
+    private String userId;
     private BigDecimal totalAmount;
     private String status;
     private UUID shippingAddressId;

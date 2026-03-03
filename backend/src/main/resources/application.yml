@@ -4,7 +4,6 @@ server:
 
 spring:
   datasource:
-    # Use environment variables from docker-compose, with defaults for local development outside of Docker.
     url: "${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/eshop}"
     username: "${SPRING_DATASOURCE_USERNAME:postgres}"
     password: "${SPRING_DATASOURCE_PASSWORD:postgres}"
@@ -17,11 +16,28 @@ spring:
         format_sql: true
   security:
     oauth2:
+      client:
+        provider:
+          auth0:
+            # This URI MUST NOT have a trailing slash
+            issuer-uri: "${AUTH0_ISSUER_URI}"
+        registration:
+          auth0:
+            provider: auth0
+            client-id: "${AUTH0_CLIENT_ID}"
+            client-secret: "${AUTH0_CLIENT_SECRET}"
+            authorization-grant-type: "client_credentials"
+            audience: "${AUTH0_AUDIENCE}"
       resourceserver:
         jwt:
-          # These values are injected by docker-compose from the .env file
-          issuer-uri: "${SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI}"
-          audience: "${SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_AUDIENCE}"
+          # This URI for resource server validation also MUST NOT have a trailing slash
+          issuer-uri: "${AUTH0_ISSUER_URI}"
+
+# Configuration for our custom Auth0 API client
+auth0:
+  api:
+    base-url: "${AUTH0_AUDIENCE}" # The audience is the base URL for the Auth0 Management API
+
 cors:
   allowed-origins: "${CORS_ALLOWED-ORIGINS:http://localhost:4200}"
 

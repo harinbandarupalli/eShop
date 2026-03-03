@@ -2,7 +2,7 @@
 
 CREATE TABLE eShop.addresses (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL REFERENCES eShop.users(id) ON DELETE CASCADE,
+    user_id         VARCHAR(255) NOT NULL REFERENCES eShop.users (sub) ON DELETE CASCADE,
     address_line1 VARCHAR(255) NOT NULL,
     address_line2 VARCHAR(255),
     city VARCHAR(100) NOT NULL,
@@ -11,8 +11,8 @@ CREATE TABLE eShop.addresses (
     country VARCHAR(100) NOT NULL,
     created_timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     last_updated_timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    created_by UUID REFERENCES eShop.users(id),
-    last_updated_by UUID REFERENCES eShop.users(id)
+    created_by      VARCHAR(255) REFERENCES eShop.users (sub),
+    last_updated_by VARCHAR(255) REFERENCES eShop.users (sub)
 );
 
 -- Addresses History
@@ -21,7 +21,7 @@ CREATE TABLE eShop.addresses_history (
     action CHAR(1) NOT NULL,
     changed_on TIMESTAMP WITH TIME ZONE NOT NULL,
     id UUID,
-    user_id UUID,
+    user_id         VARCHAR(255),
     address_line1 VARCHAR(255),
     address_line2 VARCHAR(255),
     city VARCHAR(100),
@@ -30,8 +30,8 @@ CREATE TABLE eShop.addresses_history (
     country VARCHAR(100),
     created_timestamp TIMESTAMP WITH TIME ZONE,
     last_updated_timestamp TIMESTAMP WITH TIME ZONE,
-    created_by UUID,
-    last_updated_by UUID
+    created_by      VARCHAR(255),
+    last_updated_by VARCHAR(255)
 );
 
 CREATE TRIGGER addresses_history_trigger

@@ -7,8 +7,8 @@ CREATE TABLE eShop.product_categories (
     description TEXT,
     created_timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     last_updated_timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    created_by UUID REFERENCES eShop.users(id),
-    last_updated_by UUID REFERENCES eShop.users(id)
+    created_by      VARCHAR(255) REFERENCES eShop.users (sub),
+    last_updated_by VARCHAR(255) REFERENCES eShop.users (sub)
 );
 
 -- Products
@@ -22,8 +22,8 @@ CREATE TABLE eShop.products (
     is_trending BOOLEAN DEFAULT FALSE,
     created_timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     last_updated_timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    created_by UUID REFERENCES eShop.users(id),
-    last_updated_by UUID REFERENCES eShop.users(id)
+    created_by      VARCHAR(255) REFERENCES eShop.users (sub),
+    last_updated_by VARCHAR(255) REFERENCES eShop.users (sub)
 );
 
 -- Product Images
@@ -34,8 +34,8 @@ CREATE TABLE eShop.product_images (
     alt_text VARCHAR(255),
     created_timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     last_updated_timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    created_by UUID REFERENCES eShop.users(id),
-    last_updated_by UUID REFERENCES eShop.users(id)
+    created_by      VARCHAR(255) REFERENCES eShop.users (sub),
+    last_updated_by VARCHAR(255) REFERENCES eShop.users (sub)
 );
 
 -- Product Categories History
@@ -48,8 +48,8 @@ CREATE TABLE eShop.product_categories_history (
     description TEXT,
     created_timestamp TIMESTAMP WITH TIME ZONE,
     last_updated_timestamp TIMESTAMP WITH TIME ZONE,
-    created_by UUID,
-    last_updated_by UUID
+    created_by      VARCHAR(255),
+    last_updated_by VARCHAR(255)
 );
 
 CREATE TRIGGER product_categories_history_trigger
@@ -70,8 +70,8 @@ CREATE TABLE eShop.products_history (
     is_trending BOOLEAN,
     created_timestamp TIMESTAMP WITH TIME ZONE,
     last_updated_timestamp TIMESTAMP WITH TIME ZONE,
-    created_by UUID,
-    last_updated_by UUID
+    created_by      VARCHAR(255),
+    last_updated_by VARCHAR(255)
 );
 
 CREATE TRIGGER products_history_trigger
@@ -89,8 +89,8 @@ CREATE TABLE eShop.product_images_history (
     alt_text VARCHAR(255),
     created_timestamp TIMESTAMP WITH TIME ZONE,
     last_updated_timestamp TIMESTAMP WITH TIME ZONE,
-    created_by UUID,
-    last_updated_by UUID
+    created_by      VARCHAR(255),
+    last_updated_by VARCHAR(255)
 );
 
 CREATE TRIGGER product_images_history_trigger

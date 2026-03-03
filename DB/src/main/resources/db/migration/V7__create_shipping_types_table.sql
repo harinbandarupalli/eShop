@@ -6,8 +6,8 @@ CREATE TABLE eShop.shipping_types (
     cost DECIMAL(10, 2) NOT NULL,
     created_timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     last_updated_timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    created_by UUID REFERENCES eShop.users(id),
-    last_updated_by UUID REFERENCES eShop.users(id)
+    created_by      VARCHAR(255) REFERENCES eShop.users (sub),
+    last_updated_by VARCHAR(255) REFERENCES eShop.users (sub)
 );
 
 -- Shipping Types History
@@ -20,8 +20,8 @@ CREATE TABLE eShop.shipping_types_history (
     cost DECIMAL(10, 2),
     created_timestamp TIMESTAMP WITH TIME ZONE,
     last_updated_timestamp TIMESTAMP WITH TIME ZONE,
-    created_by UUID,
-    last_updated_by UUID
+    created_by      VARCHAR(255),
+    last_updated_by VARCHAR(255)
 );
 
 CREATE TRIGGER shipping_types_history_trigger

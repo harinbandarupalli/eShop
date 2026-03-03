@@ -1,11 +1,12 @@
-package com.bilbo.store.dto;
+package com.bilbo.store.service.dto;
 
+import lombok.Builder;
 import lombok.Data;
-import java.util.UUID;
 
 @Data
+@Builder
 public class UserDTO {
-    private UUID id;
+    private String sub;
     private String username;
     private String email;
     private String firstName;

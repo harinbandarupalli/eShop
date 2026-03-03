@@ -3,7 +3,7 @@
 -- Orders
 CREATE TABLE eShop.orders (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL REFERENCES eShop.users(id),
+    user_id         VARCHAR(255) NOT NULL REFERENCES eShop.users (sub),
     total_amount DECIMAL(10, 2) NOT NULL,
     status VARCHAR(50) NOT NULL DEFAULT 'PENDING', -- e.g., PENDING, PROCESSING, SHIPPED, DELIVERED, CANCELED
     shipping_address_id UUID NOT NULL REFERENCES eShop.addresses(id),
@@ -12,8 +12,8 @@ CREATE TABLE eShop.orders (
     payment_method_id UUID REFERENCES eShop.payment_methods(id),
     created_timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     last_updated_timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    created_by UUID REFERENCES eShop.users(id),
-    last_updated_by UUID REFERENCES eShop.users(id)
+    created_by      VARCHAR(255) REFERENCES eShop.users (sub),
+    last_updated_by VARCHAR(255) REFERENCES eShop.users (sub)
 );
 
 -- Order Items
@@ -25,8 +25,8 @@ CREATE TABLE eShop.order_items (
     price_at_purchase DECIMAL(10, 2) NOT NULL,
     created_timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     last_updated_timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    created_by UUID REFERENCES eShop.users(id),
-    last_updated_by UUID REFERENCES eShop.users(id)
+    created_by      VARCHAR(255) REFERENCES eShop.users (sub),
+    last_updated_by VARCHAR(255) REFERENCES eShop.users (sub)
 );
 
 -- Orders History
@@ -35,7 +35,7 @@ CREATE TABLE eShop.orders_history (
     action CHAR(1) NOT NULL,
     changed_on TIMESTAMP WITH TIME ZONE NOT NULL,
     id UUID,
-    user_id UUID,
+    user_id         VARCHAR(255),
     total_amount DECIMAL(10, 2),
     status VARCHAR(50),
     shipping_address_id UUID,
@@ -44,8 +44,8 @@ CREATE TABLE eShop.orders_history (
     payment_method_id UUID,
     created_timestamp TIMESTAMP WITH TIME ZONE,
     last_updated_timestamp TIMESTAMP WITH TIME ZONE,
-    created_by UUID,
-    last_updated_by UUID
+    created_by      VARCHAR(255),
+    last_updated_by VARCHAR(255)
 );
 
 CREATE TRIGGER orders_history_trigger
@@ -64,8 +64,8 @@ CREATE TABLE eShop.order_items_history (
     price_at_purchase DECIMAL(10, 2),
     created_timestamp TIMESTAMP WITH TIME ZONE,
     last_updated_timestamp TIMESTAMP WITH TIME ZONE,
-    created_by UUID,
-    last_updated_by UUID
+    created_by      VARCHAR(255),
+    last_updated_by VARCHAR(255)
 );
 
 CREATE TRIGGER order_items_history_trigger
