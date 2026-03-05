@@ -1,45 +1,33 @@
 -- ============================================================
--- V7: Create shipping_types table + seed data.
---
---  Shipping modes:
---    Standard Shipping — $2.99
---    Free Shipping     — $0.00 (threshold logic at app layer)
+-- V2: Create product_categories table.
+--     Categories are now linked to product_bags (not products)
+--     via a many-to-many join table created in V4.
 -- ============================================================
 
-CREATE TABLE eShop.shipping_types (
+CREATE TABLE eShop.product_categories (
     id                     UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name                   VARCHAR(100) UNIQUE NOT NULL,
-    cost                   DECIMAL(10, 2) NOT NULL CHECK (cost >= 0),
     description            TEXT,
-    is_active              BOOLEAN NOT NULL DEFAULT TRUE,
     created_timestamp      TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     last_updated_timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     created_by             VARCHAR(255) REFERENCES eShop.users(sub),
     last_updated_by        VARCHAR(255) REFERENCES eShop.users(sub)
 );
 
--- Seed shipping types
-INSERT INTO eShop.shipping_types (name, cost, description)
-VALUES
-    ('Standard Shipping', 2.99, 'Standard delivery, 5-7 business days.'),
-    ('Free Shipping',     0.00, 'Free delivery for qualifying orders.');
-
 -- History
-CREATE TABLE eShop.shipping_types_history (
+CREATE TABLE eShop.product_categories_history (
     history_id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     action                 CHAR(1) NOT NULL,
     changed_on             TIMESTAMP WITH TIME ZONE NOT NULL,
     id                     UUID,
     name                   VARCHAR(100),
-    cost                   DECIMAL(10, 2),
     description            TEXT,
-    is_active              BOOLEAN,
     created_timestamp      TIMESTAMP WITH TIME ZONE,
     last_updated_timestamp TIMESTAMP WITH TIME ZONE,
     created_by             VARCHAR(255),
     last_updated_by        VARCHAR(255)
 );
 
-CREATE TRIGGER shipping_types_history_trigger
-AFTER INSERT OR UPDATE OR DELETE ON eShop.shipping_types
+CREATE TRIGGER product_categories_history_trigger
+AFTER INSERT OR UPDATE OR DELETE ON eShop.product_categories
     FOR EACH ROW EXECUTE FUNCTION eShop.log_history();
