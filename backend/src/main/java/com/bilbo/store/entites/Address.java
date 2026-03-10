@@ -26,8 +26,9 @@ public class Address {
     @EqualsAndHashCode.Include
     private UUID id;
 
-    @Column(name = "user_id", nullable = false)
-    private String userId;
+    /** Owner email — works for both authenticated and guest users. */
+    @Column(nullable = false)
+    private String email;
 
     @Column(name = "address_line1", nullable = false)
     private String addressLine1;
@@ -46,6 +47,9 @@ public class Address {
 
     @Column(nullable = false, length = 100)
     private String country;
+
+    @Column(name = "is_default", nullable = false)
+    private Boolean isDefault;
 
     @Column(name = "created_timestamp", updatable = false)
     private OffsetDateTime createdTimestamp;

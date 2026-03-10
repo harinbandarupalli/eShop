@@ -1,11 +1,12 @@
 package com.bilbo.store.dto;
 
-import lombok.Data;
 import java.util.UUID;
+import lombok.Data;
 
 @Data
 public class CartItemDTO {
     private UUID id;
-    private UUID productId;
+    private UUID cartId;
+    private ProductBagDTO bag;
     private Integer quantity;
 }

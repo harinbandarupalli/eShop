@@ -114,9 +114,48 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
-    </dependencies>
+    		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-testcontainers</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-database-postgresql</artifactId>
+			<scope>test</scope>
+		</dependency>
 
-    <build>
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.testcontainers</groupId>
+				<artifactId>testcontainers-bom</artifactId>
+				<version>1.19.7</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+        <directory>${project.basedir}/target-cli</directory>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -144,6 +183,17 @@
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>default-testCompile</id>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                        <configuration>
+                            <proc>none</proc>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -165,10 +215,9 @@
                 </executions>
                 <configuration>
                     <includes>
-                        <include>**/com/bilbo/store/controller/**/*.class</include>
-                        <include>**/com.bilbo.store/service/**/*.class</include>
-                        <include>**/com.bilbo.store/mapper/**/*.class</include>
-                        <include>**/com.bilbo.store/util/**/*.class</include>
+                        <include>com/bilbo/store/controller/**</include>
+                        <include>com/bilbo/store/service/**</include>
+                        <include>com/bilbo/store/util/**</include>
                     </includes>
                 </configuration>
             </plugin>

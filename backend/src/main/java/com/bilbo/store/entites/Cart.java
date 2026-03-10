@@ -19,7 +19,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString(exclude = {"items"})
+@ToString(exclude = { "items" })
 @Entity
 @Table(name = "carts", schema = "eshop")
 public class Cart {
@@ -29,8 +29,22 @@ public class Cart {
     @EqualsAndHashCode.Include
     private UUID id;
 
-    @Column(name = "user_id", unique = true)
-    private String userId;
+    /**
+     * Email identifies both guest and authenticated users.
+     * May be null for fully anonymous (pre-email) sessions.
+     */
+    @Column
+    private String email;
+
+    /** Browser/session ID for anonymous carts before email is known. */
+    @Column(name = "session_id")
+    private String sessionId;
+
+    /**
+     * Lifecycle: ACTIVE → CHECKED_OUT / ABANDONED / MERGED.
+     */
+    @Column(nullable = false, length = 20)
+    private String status;
 
     @Column(name = "created_timestamp", updatable = false)
     private OffsetDateTime createdTimestamp;

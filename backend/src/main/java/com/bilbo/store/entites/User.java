@@ -2,9 +2,12 @@ package com.bilbo.store.entites;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.OffsetDateTime;
+import java.util.UUID;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,11 +22,11 @@ import lombok.ToString;
 public class User {
 
     @Id
-    @Column(length = 255)
     @EqualsAndHashCode.Include
     private String sub;
 
-    @Column(unique = true, nullable = false, length = 50)
+    /** Equals email for standard sign-up; separate for OAuth providers. */
+    @Column(unique = true, nullable = false)
     private String username;
 
     @Column(unique = true, nullable = false)

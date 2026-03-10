@@ -8,12 +8,13 @@ import lombok.Data;
 @Data
 public class OrderDTO {
     private UUID id;
-    private String userId;
-    private BigDecimal totalAmount;
+    private String email;
+    private UUID cartId;
+    private AddressDTO address;
+    private PaymentMethodDTO paymentMethod;
+    private ShippingTypeDTO shippingType;
     private String status;
-    private UUID shippingAddressId;
-    private UUID billingAddressId;
-    private UUID shippingTypeId;
-    private UUID paymentMethodId;
-    private List<OrderItemDTO> items;
+    private BigDecimal totalAmount;
+    private String notes;
+    private List<OrderBagSnapshotDTO> bagSnapshots;
 }

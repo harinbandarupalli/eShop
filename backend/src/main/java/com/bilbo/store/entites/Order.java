@@ -22,7 +22,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString(exclude = {"shippingAddress", "billingAddress", "shippingType", "paymentMethod", "items"})
+@ToString(exclude = { "cart", "address", "paymentMethod", "shippingType", "bagSnapshots" })
 @Entity
 @Table(name = "orders", schema = "eshop")
 public class Order {
@@ -32,30 +32,34 @@ public class Order {
     @EqualsAndHashCode.Include
     private UUID id;
 
-    @Column(name = "user_id", nullable = false)
-    private String userId;
-
-    @Column(name = "total_amount", nullable = false, precision = 10, scale = 2)
-    private BigDecimal totalAmount;
-
-    @Column(nullable = false, length = 50)
-    private String status;
+    /** Email identifies both guest and authenticated users. */
+    @Column(nullable = false)
+    private String email;
 
     @ManyToOne
-    @JoinColumn(name = "shipping_address_id", nullable = false)
-    private Address shippingAddress;
+    @JoinColumn(name = "cart_id", nullable = false)
+    private Cart cart;
 
     @ManyToOne
-    @JoinColumn(name = "billing_address_id", nullable = false)
-    private Address billingAddress;
+    @JoinColumn(name = "address_id", nullable = false)
+    private Address address;
+
+    @ManyToOne
+    @JoinColumn(name = "payment_method_id", nullable = false)
+    private PaymentMethod paymentMethod;
 
     @ManyToOne
     @JoinColumn(name = "shipping_type_id", nullable = false)
     private ShippingType shippingType;
 
-    @ManyToOne
-    @JoinColumn(name = "payment_method_id")
-    private PaymentMethod paymentMethod;
+    @Column(nullable = false, length = 50)
+    private String status;
+
+    @Column(name = "total_amount", nullable = false, precision = 10, scale = 2)
+    private BigDecimal totalAmount;
+
+    @Column(columnDefinition = "TEXT")
+    private String notes;
 
     @Column(name = "created_timestamp", updatable = false)
     private OffsetDateTime createdTimestamp;
@@ -70,5 +74,5 @@ public class Order {
     private String lastUpdatedBy;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderItem> items;
+    private List<OrderBagSnapshot> bagSnapshots;
 }

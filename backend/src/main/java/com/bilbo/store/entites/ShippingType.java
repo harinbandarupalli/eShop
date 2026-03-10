@@ -27,11 +27,17 @@ public class ShippingType {
     @EqualsAndHashCode.Include
     private UUID id;
 
-    @Column(unique = true, nullable = false, length = 50)
+    @Column(unique = true, nullable = false, length = 100)
     private String name;
 
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal cost;
+
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive;
 
     @Column(name = "created_timestamp", updatable = false)
     private OffsetDateTime createdTimestamp;

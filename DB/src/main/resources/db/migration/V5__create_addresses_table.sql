@@ -18,8 +18,8 @@ CREATE TABLE eShop.addresses (
     is_default             BOOLEAN NOT NULL DEFAULT FALSE,
     created_timestamp      TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     last_updated_timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    created_by             VARCHAR(255) REFERENCES eShop.users(sub),  -- NULL for guest-created
-    last_updated_by        VARCHAR(255) REFERENCES eShop.users(sub)
+    created_by             VARCHAR(255),  -- NULL for guest-created
+    last_updated_by        VARCHAR(255)
 );
 
 -- Index for fast lookup by email

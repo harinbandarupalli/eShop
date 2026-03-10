@@ -27,38 +27,40 @@ public class SecurityConfig {
 
   private final BilboSecurityProperties bilboSecurityProperties;
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-      http
-                .csrf(AbstractHttpConfigurer::disable)
-                .cors(withDefaults())
-                .authorizeHttpRequests(authz -> authz
-                    .requestMatchers(
-                        bilboSecurityProperties.getWhiteListUrls().toArray(new String[0]))
-                    .permitAll()
-                        .anyRequest().authenticated()
-                )
-          .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http
+        .csrf(AbstractHttpConfigurer::disable)
+        .cors(withDefaults())
+        .authorizeHttpRequests(authz -> authz
+            .requestMatchers(
+                bilboSecurityProperties.getWhiteListUrls().toArray(new String[0]))
+            .permitAll()
+            .anyRequest().authenticated())
+        .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))
+        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        return http.build();
-    }
+    return http.build();
+  }
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource(@Value("${cors.allowed-origins}") List<String> allowedOrigins) {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(allowedOrigins);
-        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
-      configuration.setAllowedMethods(List.of("*"));
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+  @Bean
+  public CorsConfigurationSource corsConfigurationSource(
+      @Value("${cors.allowed-origins}") List<String> allowedOrigins) {
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.setAllowedOrigins(allowedOrigins);
+    configuration.setAllowedHeaders(List.of("*"));
+    configuration.setAllowedMethods(List.of("*"));
+    configuration.setAllowCredentials(true);
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+    return source;
+  }
 
   @Bean
   public JwtAuthenticationConverter jwtAuthenticationConverter() {
     JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-    // When RBAC is enabled in your Auth0 API settings, the roles are included in the "permissions" claim.
+    // When RBAC is enabled in your Auth0 API settings, the roles are included in
+    // the "permissions" claim.
     // This is the standard and recommended way to handle roles with Auth0.
     grantedAuthoritiesConverter.setAuthoritiesClaimName("permissions");
     grantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");

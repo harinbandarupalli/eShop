@@ -19,8 +19,8 @@ CREATE TABLE eShop.payment_methods (
     is_default             BOOLEAN NOT NULL DEFAULT FALSE,
     created_timestamp      TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     last_updated_timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    created_by             VARCHAR(255) REFERENCES eShop.users(sub),
-    last_updated_by        VARCHAR(255) REFERENCES eShop.users(sub)
+    created_by             VARCHAR(255),
+    last_updated_by        VARCHAR(255)
 );
 
 -- Index for fast lookup by email

@@ -7,6 +7,8 @@ import lombok.Data;
 @Data
 public class CartDTO {
     private UUID id;
-    private String userId;
+    private String email;
+    private String sessionId;
+    private String status;
     private List<CartItemDTO> items;
 }

@@ -6,8 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
@@ -22,7 +20,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString(exclude = {"category", "images"})
+@ToString(exclude = { "images" })
 @Entity
 @Table(name = "products", schema = "eshop")
 public class Product {
@@ -44,11 +42,10 @@ public class Product {
     @Column(name = "stock_quantity", nullable = false)
     private Integer stockQuantity;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private ProductCategory category;
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive;
 
-    @Column(name = "is_trending")
+    @Column(name = "is_trending", nullable = false)
     private Boolean isTrending;
 
     @Column(name = "created_timestamp", updatable = false)

@@ -32,7 +32,7 @@ public class ProductService {
     }
 
     public ProductDTO createProduct(ProductDTO newProduct, String createdBy) {
-        log.info("Creating new product: {}", newProduct.name());
+        log.info("Creating new product: {}", newProduct.getName());
         User user = userService.processUser(createdBy);
         Product product = productMapper.toEntity(newProduct);
         product.setCreatedBy(user.getSub());
@@ -65,11 +65,13 @@ public class ProductService {
                 });
         User user = userService.processUser(updatedBy);
 
-        existingProduct.setName(productDTO.name());
-        existingProduct.setDescription(productDTO.description());
-        existingProduct.setPrice(productDTO.price());
-        existingProduct.setStockQuantity(productDTO.stockQuantity());
-        existingProduct.setIsTrending(productDTO.isTrending());
+        existingProduct.setName(productDTO.getName());
+        existingProduct.setDescription(productDTO.getDescription());
+        existingProduct.setPrice(productDTO.getPrice());
+        existingProduct.setStockQuantity(productDTO.getStockQuantity());
+        existingProduct.setIsTrending(productDTO.getIsTrending());
+        existingProduct.setIsActive(
+                productDTO.getIsActive() != null ? productDTO.getIsActive() : existingProduct.getIsActive());
         existingProduct.setLastUpdatedTimestamp(OffsetDateTime.now());
         existingProduct.setLastUpdatedBy(user.getSub());
 
@@ -87,20 +89,23 @@ public class ProductService {
                 });
         User user = userService.processUser(updatedBy);
 
-        if (productDTO.name() != null) {
-            existingProduct.setName(productDTO.name());
+        if (productDTO.getName() != null) {
+            existingProduct.setName(productDTO.getName());
         }
-        if (productDTO.description() != null) {
-            existingProduct.setDescription(productDTO.description());
+        if (productDTO.getDescription() != null) {
+            existingProduct.setDescription(productDTO.getDescription());
         }
-        if (productDTO.price() != null) {
-            existingProduct.setPrice(productDTO.price());
+        if (productDTO.getPrice() != null) {
+            existingProduct.setPrice(productDTO.getPrice());
         }
-        if (productDTO.stockQuantity() != null) {
-            existingProduct.setStockQuantity(productDTO.stockQuantity());
+        if (productDTO.getStockQuantity() != null) {
+            existingProduct.setStockQuantity(productDTO.getStockQuantity());
         }
-        if (productDTO.isTrending() != null) {
-            existingProduct.setIsTrending(productDTO.isTrending());
+        if (productDTO.getIsTrending() != null) {
+            existingProduct.setIsTrending(productDTO.getIsTrending());
+        }
+        if (productDTO.getIsActive() != null) {
+            existingProduct.setIsActive(productDTO.getIsActive());
         }
         existingProduct.setLastUpdatedTimestamp(OffsetDateTime.now());
         existingProduct.setLastUpdatedBy(user.getSub());

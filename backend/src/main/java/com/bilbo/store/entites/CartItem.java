@@ -18,7 +18,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString(exclude = {"cart", "product"})
+@ToString(exclude = { "cart", "bag" })
 @Entity
 @Table(name = "cart_items", schema = "eshop")
 public class CartItem {
@@ -32,9 +32,13 @@ public class CartItem {
     @JoinColumn(name = "cart_id", nullable = false)
     private Cart cart;
 
+    /**
+     * Product bag added to the cart — users interact with bags, not individual
+     * products.
+     */
     @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
+    @JoinColumn(name = "bag_id", nullable = false)
+    private ProductBag bag;
 
     @Column(nullable = false)
     private Integer quantity;

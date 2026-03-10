@@ -1,0 +1,69 @@
+# PostgreSQL Database Connection
+server:
+  forward-headers-strategy: native
+
+spring:
+  datasource:
+    url: "${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/eshop}"
+    username: "${SPRING_DATASOURCE_USERNAME:postgres}"
+    password: "${SPRING_DATASOURCE_PASSWORD:postgres}"
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  security:
+    oauth2:
+      client:
+        provider:
+          auth0:
+            # This URI MUST NOT have a trailing slash
+            issuer-uri: "${AUTH0_ISSUER_URI}"
+            token-uri: "${AUTH0_ISSUER_URI}/oauth/token"
+            authorization-uri: "${AUTH0_ISSUER_URI}/authorize"
+        registration:
+          auth0:
+            provider: auth0
+            client-id: "${AUTH0_CLIENT_ID}"
+            client-secret: "${AUTH0_CLIENT_SECRET}"
+            authorization-grant-type: "client_credentials"
+            audience: "${AUTH0_AUDIENCE}"
+      resourceserver:
+        jwt:
+          # This URI for resource server validation also MUST NOT have a trailing slash
+          issuer-uri: "${AUTH0_ISSUER_URI}"
+
+# Configuration for our custom Auth0 API client
+auth0:
+  api:
+    base-url: "${AUTH0_AUDIENCE}" # The audience is the base URL for the Auth0 Management API
+
+cors:
+  allowed-origins: "${CORS_ALLOWED-ORIGINS:http://localhost:4200}"
+
+bilbo:
+  security:
+    white-list-urls:
+      - "/api/products/**"
+      - "/api/categories/**"
+      - "/api/product-bags/**"
+      - "/api/carts/**"
+      - "/api/orders/**"
+      - "/api/shipping-types/**"
+      - "/public/**"
+      - "/v3/api-docs/**"
+      - "/swagger-ui/**"
+      - "/swagger-ui.html"
+      - "/actuator/health"
+    principal-attribute: sub
+
+springdoc:
+  version: "0.0.1-SNAPSHOT"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health

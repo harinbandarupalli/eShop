@@ -21,6 +21,8 @@ spring:
           auth0:
             # This URI MUST NOT have a trailing slash
             issuer-uri: "${AUTH0_ISSUER_URI}"
+            token-uri: "${AUTH0_ISSUER_URI}/oauth/token"
+            authorization-uri: "${AUTH0_ISSUER_URI}/authorize"
         registration:
           auth0:
             provider: auth0
@@ -45,6 +47,11 @@ bilbo:
   security:
     white-list-urls:
       - "/api/products/**"
+      - "/api/categories/**"
+      - "/api/product-bags/**"
+      - "/api/carts/**"
+      - "/api/orders/**"
+      - "/api/shipping-types/**"
       - "/public/**"
       - "/v3/api-docs/**"
       - "/swagger-ui/**"
@@ -53,7 +60,7 @@ bilbo:
     principal-attribute: sub
 
 springdoc:
-  version: '@project.version@'
+  version: "@project.version@"
 
 management:
   endpoints:

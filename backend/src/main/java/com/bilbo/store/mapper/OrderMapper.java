@@ -5,27 +5,26 @@ import com.bilbo.store.entites.Order;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = {OrderItemMapper.class, AddressMapper.class,
-    PaymentMethodMapper.class})
+@Mapper(componentModel = "spring", uses = { AddressMapper.class, PaymentMethodMapper.class, ShippingTypeMapper.class,
+        OrderBagSnapshotMapper.class })
 public interface OrderMapper {
 
-    @Mapping(source = "userId", target = "userId")
-    @Mapping(source = "shippingAddress.id", target = "shippingAddressId")
-    @Mapping(source = "billingAddress.id", target = "billingAddressId")
-    @Mapping(source = "shippingType.id", target = "shippingTypeId")
-    @Mapping(source = "paymentMethod.id", target = "paymentMethodId")
+    @Mapping(source = "cart.id", target = "cartId")
+    @Mapping(source = "address", target = "address")
+    @Mapping(source = "paymentMethod", target = "paymentMethod")
+    @Mapping(source = "shippingType", target = "shippingType")
+    @Mapping(source = "bagSnapshots", target = "bagSnapshots")
     OrderDTO toDto(Order order);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "userId", ignore = true)
-    @Mapping(target = "shippingAddress", ignore = true)
-    @Mapping(target = "billingAddress", ignore = true)
-    @Mapping(target = "shippingType", ignore = true)
+    @Mapping(target = "cart", ignore = true)
+    @Mapping(target = "address", ignore = true)
     @Mapping(target = "paymentMethod", ignore = true)
-    @Mapping(target = "items", ignore = true)
-    @Mapping(target = "createdBy", ignore = true)
-    @Mapping(target = "lastUpdatedBy", ignore = true)
+    @Mapping(target = "shippingType", ignore = true)
+    @Mapping(target = "bagSnapshots", ignore = true)
     @Mapping(target = "createdTimestamp", ignore = true)
     @Mapping(target = "lastUpdatedTimestamp", ignore = true)
-    Order toEntity(OrderDTO orderDTO);
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "lastUpdatedBy", ignore = true)
+    Order toEntity(OrderDTO dto);
 }

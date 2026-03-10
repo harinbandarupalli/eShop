@@ -18,7 +18,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString(exclude = {"billingAddress"})
+@ToString(exclude = { "billingAddress" })
 @Entity
 @Table(name = "payment_methods", schema = "eshop")
 public class PaymentMethod {
@@ -28,9 +28,11 @@ public class PaymentMethod {
     @EqualsAndHashCode.Include
     private UUID id;
 
-    @Column(name = "user_id", nullable = false)
-    private String userId;
+    /** Owner email — works for both authenticated and guest users. */
+    @Column(nullable = false)
+    private String email;
 
+    /** Token from payment provider (e.g., Stripe). Raw card data never stored. */
     @Column(length = 255)
     private String token;
 
@@ -53,8 +55,8 @@ public class PaymentMethod {
     @JoinColumn(name = "billing_address_id")
     private Address billingAddress;
 
-    @Column(name = "billing_zipcode", length = 20)
-    private String billingZipcode;
+    @Column(name = "is_default", nullable = false)
+    private Boolean isDefault;
 
     @Column(name = "created_timestamp", updatable = false)
     private OffsetDateTime createdTimestamp;

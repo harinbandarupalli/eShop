@@ -1,7 +1,7 @@
 package com.bilbo.store.dto;
 
-import lombok.Data;
 import java.util.UUID;
+import lombok.Data;
 
 @Data
 public class ProductCategoryDTO {

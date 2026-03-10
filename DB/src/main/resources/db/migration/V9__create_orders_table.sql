@@ -30,8 +30,8 @@ CREATE TABLE eShop.orders (
     notes                  TEXT,                             -- optional buyer notes
     created_timestamp      TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     last_updated_timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    created_by             VARCHAR(255) REFERENCES eShop.users(sub),
-    last_updated_by        VARCHAR(255) REFERENCES eShop.users(sub)
+    created_by             VARCHAR(255),
+    last_updated_by        VARCHAR(255)
 );
 
 -- Order Bag Snapshots — immutable record of bags & prices at checkout

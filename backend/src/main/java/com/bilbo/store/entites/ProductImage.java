@@ -18,7 +18,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString(exclude = {"product"})
+@ToString(exclude = { "product" })
 @Entity
 @Table(name = "product_images", schema = "eshop")
 public class ProductImage {
@@ -32,11 +32,14 @@ public class ProductImage {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @Column(name = "image_url", columnDefinition = "TEXT", nullable = false)
+    @Column(name = "image_url", nullable = false, columnDefinition = "TEXT")
     private String imageUrl;
 
-    @Column(name = "alt_text")
+    @Column(name = "alt_text", length = 255)
     private String altText;
+
+    @Column(name = "display_order", nullable = false)
+    private Integer displayOrder;
 
     @Column(name = "created_timestamp", updatable = false)
     private OffsetDateTime createdTimestamp;

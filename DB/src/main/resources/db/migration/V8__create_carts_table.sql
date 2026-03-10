@@ -22,8 +22,8 @@ CREATE TABLE eShop.carts (
                                CHECK (status IN ('ACTIVE', 'CHECKED_OUT', 'ABANDONED', 'MERGED')),
     created_timestamp      TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     last_updated_timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    created_by             VARCHAR(255) REFERENCES eShop.users(sub),
-    last_updated_by        VARCHAR(255) REFERENCES eShop.users(sub),
+    created_by             VARCHAR(255),
+    last_updated_by        VARCHAR(255),
     -- At least one of email or session_id must be present
     CONSTRAINT cart_identity_check CHECK (email IS NOT NULL OR session_id IS NOT NULL)
 );
@@ -36,8 +36,8 @@ CREATE TABLE eShop.cart_items (
     quantity               INT NOT NULL DEFAULT 1 CHECK (quantity > 0),
     created_timestamp      TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     last_updated_timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    created_by             VARCHAR(255) REFERENCES eShop.users(sub),
-    last_updated_by        VARCHAR(255) REFERENCES eShop.users(sub),
+    created_by             VARCHAR(255),
+    last_updated_by        VARCHAR(255),
     UNIQUE (cart_id, bag_id)   -- one row per bag per cart; use ON CONFLICT to update qty
 );
 

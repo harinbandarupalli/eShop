@@ -8,14 +8,12 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface AddressMapper {
 
-    @Mapping(source = "userId", target = "userId")
     AddressDTO toDto(Address address);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "userId", ignore = true)
-    @Mapping(target = "createdBy", ignore = true)
-    @Mapping(target = "lastUpdatedBy", ignore = true)
     @Mapping(target = "createdTimestamp", ignore = true)
     @Mapping(target = "lastUpdatedTimestamp", ignore = true)
-    Address toEntity(AddressDTO addressDTO);
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "lastUpdatedBy", ignore = true)
+    Address toEntity(AddressDTO dto);
 }

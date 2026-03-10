@@ -1,5 +1,7 @@
 # Environment files
 .env
+.env.local
+.env.*.local
 
 # IDE files
 .idea/
@@ -9,6 +11,7 @@
 .project
 .settings/
 .vscode/
+.factorypath
 
 # Maven
 target/
@@ -27,6 +30,11 @@ buildNumber.properties
 *.war
 *.ear
 
+# Frontend (Vite / Node)
+node_modules/
+dist/
+.vite/
+
 # OS generated files
 .DS_Store
 .DS_Store?
@@ -35,3 +43,9 @@ buildNumber.properties
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Docker
+docker-compose.override.yml
+
+# Misc
+.gemini/

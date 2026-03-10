@@ -18,10 +18,8 @@ CREATE INDEX idx_cart_items_cart_id ON eShop.cart_items(cart_id);
 CREATE INDEX idx_cart_items_bag_id  ON eShop.cart_items(bag_id);
 
 -- Addresses
-CREATE INDEX idx_addresses_email ON eShop.addresses(email);
 
 -- Payment Methods
-CREATE INDEX idx_payment_methods_email ON eShop.payment_methods(email);
 
 -- Orders
 CREATE INDEX idx_orders_email            ON eShop.orders(email);

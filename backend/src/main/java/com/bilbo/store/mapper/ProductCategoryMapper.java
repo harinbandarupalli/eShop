@@ -8,11 +8,12 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ProductCategoryMapper {
 
-    ProductCategoryDTO toDto(ProductCategory productCategory);
+    ProductCategoryDTO toDto(ProductCategory category);
 
-    @Mapping(target = "createdBy", ignore = true)
-    @Mapping(target = "lastUpdatedBy", ignore = true)
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdTimestamp", ignore = true)
     @Mapping(target = "lastUpdatedTimestamp", ignore = true)
-    ProductCategory toEntity(ProductCategoryDTO productCategoryDTO);
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "lastUpdatedBy", ignore = true)
+    ProductCategory toEntity(ProductCategoryDTO dto);
 }
