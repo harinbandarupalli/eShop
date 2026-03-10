@@ -22,7 +22,7 @@ FROM bellsoft/liberica-openjdk-debian:21
 WORKDIR /app
 
 # Copy the executable JAR from the build stage
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=build /app/target-cli/*.jar app.jar
 
 # Expose the port the application runs on
 EXPOSE 8080
