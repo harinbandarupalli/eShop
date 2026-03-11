@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
-import { Filter, ChevronDown, ArrowRight } from 'lucide-react';
+import { Filter, ChevronDown } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { useProductBags } from '../api/queries/productQueries';
 
