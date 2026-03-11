@@ -20,10 +20,7 @@ spring:
       client:
         provider:
           auth0:
-            # This URI MUST NOT have a trailing slash
             issuer-uri: "${AUTH0_ISSUER_URI}"
-            token-uri: "${AUTH0_ISSUER_URI}/oauth/token"
-            authorization-uri: "${AUTH0_ISSUER_URI}/authorize"
         registration:
           auth0:
             provider: auth0
